@@ -4,6 +4,7 @@ import io.micronaut.core.annotation.Introspected
 import org.bson.codecs.pojo.annotations.BsonProperty
 import java.time.Clock
 import java.time.Instant
+import java.util.Date
 
 
 @Introspected
@@ -24,5 +25,5 @@ data class Invoice(
     val total: Float = items.map { item -> item.total }.reduce { acc, fl -> acc + fl }
 
     @field:BsonProperty("createdAt")
-    val createdAt: Instant = Instant.now(Clock.systemUTC())
+    val createdAt: Date = Date.from(Instant.now(Clock.systemUTC()))
 }
