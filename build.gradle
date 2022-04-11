@@ -62,7 +62,7 @@ tasks {
         }
     }
     dockerBuild {
-        images = ["deworg/invoices:latest"]
+        images = ["deworg/invoices:$project.version"]
     }
 }
 graalvmNative.toolchainDetection = false
