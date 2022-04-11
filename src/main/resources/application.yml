@@ -1,6 +1,8 @@
 micronaut:
   application:
     name: invoices
+    instance:
+      id: ${random.shortuuid}
 consul:
   client:
     default-zone: ${CONSUL_HOST:localhost}:${CONSUL_PORT:8500}
