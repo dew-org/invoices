@@ -11,10 +11,16 @@ group = "com.dew"
 
 repositories {
     mavenCentral()
+
+    maven {
+        url 'https://jitpack.io'
+    }
 }
 
 dependencies {
     kapt("io.micronaut:micronaut-http-validation")
+
+    implementation 'com.github.dew-org:common:0.0.3'
 
     implementation("io.micronaut:micronaut-http-client")
     implementation("io.micronaut:micronaut-jackson-databind")

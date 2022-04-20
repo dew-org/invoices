@@ -1,8 +1,6 @@
 package com.dew
 
-import com.dew.MongoDbUtils.closeMongoDb
-import com.dew.MongoDbUtils.mongoDbUri
-import com.dew.MongoDbUtils.startMongoDb
+import com.dew.common.infrastructure.persistence.mongo.testing.MongoDbUtils
 import com.dew.invoices.application.create.CreateInvoiceCommand
 import com.dew.invoices.application.create.Customer
 import com.dew.invoices.application.create.InvoiceItem
@@ -32,12 +30,12 @@ class InvoiceControllerTest : TestPropertyProvider {
     }
 
     override fun getProperties(): Map<String, String> {
-        startMongoDb()
-        return mapOf("mongodb.uri" to mongoDbUri)
+        MongoDbUtils.startMongoDb()
+        return mapOf("mongodb.uri" to MongoDbUtils.mongoDbUri)
     }
 
     @AfterAll
     fun cleanup() {
-        closeMongoDb()
+        MongoDbUtils.closeMongoDb()
     }
 }
