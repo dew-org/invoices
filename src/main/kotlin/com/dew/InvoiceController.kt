@@ -5,10 +5,13 @@ import com.dew.invoices.application.create.CreateInvoiceCommand
 import io.micronaut.http.HttpStatus
 import io.micronaut.http.annotation.Controller
 import io.micronaut.http.annotation.Post
+import io.micronaut.security.annotation.Secured
+import io.micronaut.security.rules.SecurityRule
 import reactor.core.publisher.Mono
 import javax.validation.Valid
 
 @Controller("/invoices")
+@Secured(SecurityRule.IS_AUTHENTICATED)
 open class InvoiceController(private val invoiceService: InvoiceService) {
 
     @Post

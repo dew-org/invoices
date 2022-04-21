@@ -19,9 +19,11 @@ repositories {
 
 dependencies {
     kapt("io.micronaut:micronaut-http-validation")
+    annotationProcessor("io.micronaut.security:micronaut-security-annotations")
 
     implementation 'com.github.dew-org:common:0.0.3'
 
+    implementation("io.micronaut.security:micronaut-security-jwt")
     implementation("io.micronaut:micronaut-http-client")
     implementation("io.micronaut:micronaut-jackson-databind")
     implementation("io.micronaut:micronaut-management")
