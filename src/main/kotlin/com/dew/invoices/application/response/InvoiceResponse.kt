@@ -5,6 +5,7 @@ import java.util.*
 
 @Introspected
 data class InvoiceResponse(
+    val id: String,
     val customer: CustomerResponse,
     val items: List<InvoiceItemResponse>,
     val subTotal: Float,

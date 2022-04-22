@@ -8,11 +8,15 @@ import com.dew.invoices.domain.Customer
 import com.dew.invoices.domain.Invoice
 import com.dew.invoices.domain.InvoiceItem
 import com.dew.invoices.domain.Product
+import org.hashids.Hashids
 
 object InvoiceMapper {
 
     fun Invoice.toResponse(): InvoiceResponse {
+        val hashids = Hashids()
+
         return InvoiceResponse(
+            hashids.encodeHex(this.id.toString()),
             this.customer.toResponse(),
             this.items.toResponse(),
             this.subTotal,

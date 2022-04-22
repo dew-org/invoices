@@ -3,7 +3,9 @@ package com.dew.invoices.domain
 import io.micronaut.core.annotation.Creator
 import io.micronaut.core.annotation.Introspected
 import org.bson.codecs.pojo.annotations.BsonCreator
+import org.bson.codecs.pojo.annotations.BsonId
 import org.bson.codecs.pojo.annotations.BsonProperty
+import org.bson.types.ObjectId
 import java.time.Clock
 import java.time.Instant
 import java.util.Date
@@ -13,7 +15,9 @@ import java.util.Date
 data class Invoice @Creator @BsonCreator constructor(
     @field:BsonProperty("customer") @param:BsonProperty("customer") val customer: Customer,
     @field:BsonProperty("items") @param:BsonProperty("items") val items: List<InvoiceItem>,
+    @field:BsonProperty("_id") @param:BsonProperty("_id") val id: ObjectId? = null,
 ) {
+
     @field:BsonProperty("subTotal")
     val subTotal: Float = items.map { item -> item.subTotal }.reduce { acc, fl -> acc + fl }
 

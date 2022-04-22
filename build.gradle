@@ -48,6 +48,7 @@ dependencies {
     testImplementation("org.awaitility:awaitility:4.2.0")
 
     compileOnly("org.graalvm.nativeimage:svm")
+    compileOnly 'org.hashids:hashids:1.0.3'
 
     runtimeOnly("com.fasterxml.jackson.module:jackson-module-kotlin")
 
