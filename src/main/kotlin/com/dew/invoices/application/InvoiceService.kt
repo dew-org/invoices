@@ -1,9 +1,13 @@
 package com.dew.invoices.application
 
 import com.dew.common.domain.invoices.PurchasedProduct
+import com.dew.invoices.application.InvoiceMapper.toResponse
 import com.dew.invoices.application.create.CreateInvoiceCommand
+import com.dew.invoices.application.response.InvoiceResponse
 import com.dew.invoices.domain.*
 import jakarta.inject.Singleton
+import org.reactivestreams.Publisher
+import reactor.core.publisher.Flux
 import reactor.core.publisher.Mono
 
 @Singleton
@@ -34,5 +38,9 @@ class InvoiceService(private val invoiceRepository: InvoiceRepository, private v
 
             Mono.just(added)
         }
+    }
+
+    fun searchAll(): Publisher<InvoiceResponse> {
+        return Flux.from(invoiceRepository.searchAll()).map { it.toResponse() }
     }
 }

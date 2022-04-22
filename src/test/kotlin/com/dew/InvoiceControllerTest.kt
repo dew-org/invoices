@@ -64,6 +64,10 @@ class InvoiceControllerTest : TestPropertyProvider {
         assertNotNull(purchasedFromKafka)
         assertEquals(product.code, purchasedFromKafka.code)
         assertEquals(1, purchasedFromKafka.quantity)
+
+        val response = invoiceClient.searchAll()
+
+        assertEquals(1, response.size)
     }
 
     override fun getProperties(): Map<String, String> {

@@ -1,6 +1,8 @@
 package com.dew.invoices.domain
 
+import io.micronaut.core.annotation.Creator
 import io.micronaut.core.annotation.Introspected
+import org.bson.codecs.pojo.annotations.BsonCreator
 import org.bson.codecs.pojo.annotations.BsonProperty
 import java.time.Clock
 import java.time.Instant
@@ -8,7 +10,7 @@ import java.util.Date
 
 
 @Introspected
-data class Invoice(
+data class Invoice @Creator @BsonCreator constructor(
     @field:BsonProperty("customer") @param:BsonProperty("customer") val customer: Customer,
     @field:BsonProperty("items") @param:BsonProperty("items") val items: List<InvoiceItem>,
 ) {

@@ -1,11 +1,13 @@
 package com.dew.invoices.domain
 
+import io.micronaut.core.annotation.Creator
 import io.micronaut.core.annotation.Introspected
+import org.bson.codecs.pojo.annotations.BsonCreator
 import org.bson.codecs.pojo.annotations.BsonProperty
 import javax.validation.constraints.NotBlank
 
 @Introspected
-data class InvoiceItem(
+data class InvoiceItem @Creator @BsonCreator constructor(
     @field:BsonProperty("product") @param:BsonProperty("product") @field:NotBlank val product: Product,
     @field:BsonProperty("price") @param:BsonProperty("price") @field:NotBlank val price: Float,
     @field:BsonProperty("quantity") @param:BsonProperty("quantity") @field:NotBlank val quantity: Int,
