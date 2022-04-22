@@ -38,6 +38,7 @@ dependencies {
     implementation("org.jetbrains.kotlin:kotlin-reflect:${kotlinVersion}")
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8:${kotlinVersion}")
     implementation("io.micronaut:micronaut-validation")
+    implementation 'org.hashids:hashids:1.0.3'
 
     runtimeOnly("ch.qos.logback:logback-classic")
 
@@ -48,7 +49,6 @@ dependencies {
     testImplementation("org.awaitility:awaitility:4.2.0")
 
     compileOnly("org.graalvm.nativeimage:svm")
-    compileOnly 'org.hashids:hashids:1.0.3'
 
     runtimeOnly("com.fasterxml.jackson.module:jackson-module-kotlin")
 

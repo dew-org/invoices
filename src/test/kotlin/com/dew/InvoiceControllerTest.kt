@@ -8,11 +8,14 @@ import com.dew.invoices.application.create.Product
 import io.micronaut.configuration.kafka.annotation.KafkaListener
 import io.micronaut.configuration.kafka.annotation.OffsetReset
 import io.micronaut.configuration.kafka.annotation.Topic
+import io.micronaut.http.HttpStatus
 import io.micronaut.http.HttpStatus.CREATED
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest
 import io.micronaut.test.support.TestPropertyProvider
 import jakarta.inject.Inject
 import org.awaitility.Awaitility.await
+import org.bson.types.ObjectId
+import org.hashids.Hashids
 import org.junit.jupiter.api.AfterAll
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertNotNull
@@ -43,7 +46,7 @@ class InvoiceControllerTest : TestPropertyProvider {
     lateinit var invoiceListener: InvoiceListener
 
     @Test
-    fun save_invoice_should_return_ok(invoiceClient: InvoiceClient) {
+    fun interact_with_invoice_controller(invoiceClient: InvoiceClient) {
         val product = Product("123", "Celular")
         val customer = Customer("321", "Manolo Jesus")
         val invoiceItem = InvoiceItem(product, 15000.0f, 1, 0.0f, 0.0f)
@@ -68,6 +71,18 @@ class InvoiceControllerTest : TestPropertyProvider {
         val response = invoiceClient.searchAll()
 
         assertEquals(1, response.size)
+
+        var findResponse = invoiceClient.findById(response.first().id)
+
+        assertNotNull(findResponse)
+        assertNotNull(findResponse.body())
+        assertEquals(HttpStatus.OK, findResponse.status())
+        assertEquals(response.first().id, findResponse.body()!!.id)
+
+        val notFountId = Hashids().encodeHex(ObjectId().toString())
+        findResponse = invoiceClient.findById(notFountId)
+        assertNotNull(findResponse)
+        assertEquals(HttpStatus.NOT_FOUND, findResponse.status())
     }
 
     override fun getProperties(): Map<String, String> {

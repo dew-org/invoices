@@ -42,13 +42,7 @@ object InvoiceMapper {
     private fun List<InvoiceItem>.toResponse(): List<InvoiceItemResponse> {
         return this.map { item ->
             InvoiceItemResponse(
-                item.product.toResponse(),
-                item.price,
-                item.quantity,
-                item.tax,
-                item.discount,
-                item.subTotal,
-                item.total
+                item.product.toResponse(), item.price, item.quantity, item.tax, item.discount, item.subTotal, item.total
             )
         }
     }

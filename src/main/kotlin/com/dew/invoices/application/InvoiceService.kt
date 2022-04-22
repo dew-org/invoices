@@ -43,4 +43,8 @@ class InvoiceService(private val invoiceRepository: InvoiceRepository, private v
     fun searchAll(): Publisher<InvoiceResponse> {
         return Flux.from(invoiceRepository.searchAll()).map { it.toResponse() }
     }
+
+    fun findById(id: String): Mono<InvoiceResponse> {
+        return invoiceRepository.findById(id).mapNotNull { it.toResponse() }
+    }
 }

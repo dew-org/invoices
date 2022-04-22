@@ -9,4 +9,6 @@ interface InvoiceRepository {
     fun save(@Valid invoice: Invoice): Mono<Boolean>
 
     fun searchAll(): Publisher<Invoice>
+
+    fun findById(id: String): Mono<Invoice>
 }

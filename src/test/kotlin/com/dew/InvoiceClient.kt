@@ -1,7 +1,8 @@
 package com.dew
 
-import com.dew.invoices.application.response.InvoiceResponse
 import com.dew.invoices.application.create.CreateInvoiceCommand
+import com.dew.invoices.application.response.InvoiceResponse
+import io.micronaut.http.HttpResponse
 import io.micronaut.http.HttpStatus
 import io.micronaut.http.annotation.Get
 import io.micronaut.http.annotation.Post
@@ -16,4 +17,7 @@ interface InvoiceClient {
 
     @Get
     fun searchAll(): List<InvoiceResponse>
+
+    @Get("/{id}")
+    fun findById(id: String): HttpResponse<InvoiceResponse>
 }
