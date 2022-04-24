@@ -7,17 +7,18 @@ import io.micronaut.http.HttpStatus
 import io.micronaut.http.annotation.Get
 import io.micronaut.http.annotation.Post
 import io.micronaut.http.client.annotation.Client
+
 import javax.validation.Valid
 
 @Client("/invoices")
 interface InvoiceClient {
 
     @Post
-    fun save(@Valid command: CreateInvoiceCommand): HttpStatus
+    HttpStatus save(@Valid CreateInvoiceCommand command)
 
     @Get
-    fun searchAll(): List<InvoiceResponse>
+    List<InvoiceResponse> searchAll()
 
     @Get("/{id}")
-    fun findById(id: String): HttpResponse<InvoiceResponse>
+    HttpResponse<InvoiceResponse> findById(String id)
 }
