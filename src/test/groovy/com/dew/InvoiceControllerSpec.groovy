@@ -45,7 +45,7 @@ class InvoiceControllerSpec extends Specification implements TestPropertyProvide
         var product = new Product("123", "Celular")
         var customer = new Customer("123", "Joao")
         var invoiceItem = new InvoiceItem(product, 15000.0f, 1, 0.0f, 0.0f)
-        var invoice = new CreateInvoiceCommand(customer, List.of(invoiceItem))
+        var invoice = new CreateInvoiceCommand(customer, List.of(invoiceItem), "USD")
 
         var status = client.save(invoice)
 
@@ -80,6 +80,7 @@ class InvoiceControllerSpec extends Specification implements TestPropertyProvide
         findResponse != null
         findResponse.body.present
         findResponse.body().id == invoiceId
+        findResponse.body().currency == "USD"
     }
 
     @Override

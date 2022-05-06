@@ -14,15 +14,19 @@ import reactor.core.publisher.Mono
 class InvoiceService(private val invoiceRepository: InvoiceRepository, private val invoiceProducer: InvoiceProducer) {
 
     fun save(command: CreateInvoiceCommand): Mono<Boolean> {
-        val invoice = Invoice(Customer(command.customer.id, command.customer.fullName), command.items.map { item ->
-            InvoiceItem(
-                Product(item.product.code, item.product.name, item.product.description),
-                item.price,
-                item.quantity,
-                item.tax / 100,
-                item.discount / 100
-            )
-        })
+        val invoice = Invoice(
+            Customer(command.customer.id, command.customer.fullName),
+            command.items.map { item ->
+                InvoiceItem(
+                    Product(item.product.code, item.product.name, item.product.description),
+                    item.price,
+                    item.quantity,
+                    item.tax / 100,
+                    item.discount / 100
+                )
+            },
+            command.currency
+        )
 
         return invoiceRepository.save(invoice).flatMap { added: Boolean ->
             // If a new invoice was added, send product purchased to update stock
