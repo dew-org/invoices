@@ -16,31 +16,32 @@ object InvoiceMapper {
         val hashids = Hashids()
 
         return InvoiceResponse(
-            hashids.encodeHex(this.id.toString()),
-            this.customer.toResponse(),
-            this.items.toResponse(),
-            this.subTotal,
-            this.tax,
-            this.discount,
-            this.total,
-            this.createdAt
+            hashids.encodeHex(id.toString()),
+            customer.toResponse(),
+            items.toResponse(),
+            currency,
+            subTotal,
+            tax,
+            discount,
+            total,
+            createdAt
         )
     }
 
     private fun Customer.toResponse(): CustomerResponse {
         return CustomerResponse(
-            this.id, this.fullName
+            id, fullName
         )
     }
 
     private fun Product.toResponse(): ProductResponse {
         return ProductResponse(
-            this.code, this.name, this.description
+            code, name, description
         )
     }
 
     private fun List<InvoiceItem>.toResponse(): List<InvoiceItemResponse> {
-        return this.map { item ->
+        return map { item ->
             InvoiceItemResponse(
                 item.product.toResponse(), item.price, item.quantity, item.tax, item.discount, item.subTotal, item.total
             )
