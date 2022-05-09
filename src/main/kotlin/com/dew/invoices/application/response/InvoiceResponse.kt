@@ -9,7 +9,7 @@ data class InvoiceResponse(
     val customer: CustomerResponse,
     val items: List<InvoiceItemResponse>,
     val currency: String,
-    val subTotal: Float,
+    val subtotal: Float,
     val tax: Float,
     val discount: Float,
     val total: Float,
