@@ -13,20 +13,30 @@ import javax.validation.constraints.NotBlank
 
 @Introspected
 data class Invoice @Creator @BsonCreator constructor(
-    @field:BsonProperty("customer") @param:BsonProperty("customer") val customer: Customer,
-    @field:BsonProperty("items") @param:BsonProperty("items") val items: List<InvoiceItem>,
-    @field:BsonProperty("currency") @param:BsonProperty("currency") @field:NotBlank val currency: String,
+    @field:BsonProperty("customer")
+    @param:BsonProperty("customer")
+    val customer: Customer,
+
+    @field:BsonProperty("items")
+    @param:BsonProperty("items")
+    val items: List<InvoiceItem>,
+
+    @field:BsonProperty("currency")
+    @param:BsonProperty("currency")
+    @field:NotBlank
+    val currency: String,
+
     @field:BsonProperty("_id") @param:BsonProperty("_id") val id: ObjectId? = null,
 ) {
 
-    @field:BsonProperty("subTotal")
-    val subTotal: Float = items.map { item -> item.subTotal }.reduce { acc, fl -> acc + fl }
+    @field:BsonProperty("subtotal")
+    val subtotal: Float = items.map { item -> item.subtotal }.reduce { acc, fl -> acc + fl }
 
     @field:BsonProperty("tax")
-    val tax: Float = items.map { item -> item.subTotal * item.tax }.reduce { acc, fl -> acc + fl }
+    val tax: Float = items.map { item -> item.subtotal * item.tax }.reduce { acc, fl -> acc + fl }
 
     @field:BsonProperty("discount")
-    val discount: Float = items.map { item -> item.subTotal * item.discount }.reduce { acc, fl -> acc + fl }
+    val discount: Float = items.map { item -> item.subtotal * item.discount }.reduce { acc, fl -> acc + fl }
 
     @field:BsonProperty
     val total: Float = items.map { item -> item.total }.reduce { acc, fl -> acc + fl }

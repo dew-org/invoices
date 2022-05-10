@@ -8,6 +8,13 @@ import javax.validation.constraints.NotBlank
 
 @Introspected
 data class Customer @Creator @BsonCreator constructor(
-    @field:BsonProperty("id") @param:BsonProperty("id") @field:NotBlank val id: String,
-    @field:BsonProperty("fullName") @param:BsonProperty("fullName") @field:NotBlank val fullName: String
+    @field:BsonProperty("id")
+    @param:BsonProperty("id")
+    @field:NotBlank
+    val id: String,
+
+    @field:BsonProperty("fullName")
+    @param:BsonProperty("fullName")
+    @field:NotBlank
+    val fullName: String
 )

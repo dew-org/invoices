@@ -9,6 +9,6 @@ data class InvoiceItemResponse(
     val quantity: Int,
     val tax: Float,
     val discount: Float,
-    val subTotal: Float,
+    val subtotal: Float,
     val total: Float
 )
