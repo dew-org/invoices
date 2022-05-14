@@ -1,13 +1,11 @@
 package com.dew.invoices.infrastructure.persistence.mongo
 
-import com.dew.invoices.domain.*
-import com.dew.invoices.infrastructure.persistence.mongo.MongoDbMapping.toDocument
-import com.dew.invoices.infrastructure.persistence.mongo.MongoDbMapping.toInvoice
+import com.dew.invoices.domain.Invoice
+import com.dew.invoices.domain.InvoiceRepository
 import com.mongodb.client.model.Filters
 import com.mongodb.reactivestreams.client.MongoClient
 import com.mongodb.reactivestreams.client.MongoCollection
 import jakarta.inject.Singleton
-import org.bson.Document
 import org.bson.types.ObjectId
 import org.reactivestreams.Publisher
 import reactor.core.publisher.Flux
@@ -19,17 +17,17 @@ open class MongoDbInvoiceRepository(
 ) : InvoiceRepository {
 
     override fun save(invoice: Invoice): Mono<Boolean> =
-        Mono.from(collection.insertOne(invoice.toDocument()))
+        Mono.from(collection.insertOne(invoice))
             .map { true }.onErrorReturn(false)
 
     override fun searchAll(): Publisher<Invoice> =
-        Flux.from(collection.find()).map { it.toInvoice() }
+        Flux.from(collection.find())
 
     override fun findById(id: String): Mono<Invoice> = Mono.from(
         collection.find(Filters.eq("_id", ObjectId(id))).first()
-    ).mapNotNull { it.toInvoice() }
+    )
 
-    private val collection: MongoCollection<Document>
+    private val collection: MongoCollection<Invoice>
         get() = mongoClient.getDatabase(mongoDbConfiguration.name)
-            .getCollection(mongoDbConfiguration.collection)
+            .getCollection(mongoDbConfiguration.collection, Invoice::class.java)
 }

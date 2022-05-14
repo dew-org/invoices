@@ -2,6 +2,7 @@ package com.dew.invoices.domain
 
 import io.micronaut.core.annotation.Creator
 import io.micronaut.core.annotation.Introspected
+import io.micronaut.core.annotation.ReflectiveAccess
 import org.bson.codecs.pojo.annotations.BsonCreator
 import org.bson.codecs.pojo.annotations.BsonProperty
 import org.bson.types.ObjectId
@@ -12,6 +13,7 @@ import javax.validation.constraints.NotBlank
 
 
 @Introspected
+@ReflectiveAccess
 data class Invoice @Creator @BsonCreator constructor(
     @field:BsonProperty("customer")
     @param:BsonProperty("customer")
@@ -26,7 +28,8 @@ data class Invoice @Creator @BsonCreator constructor(
     @field:NotBlank
     val currency: String,
 
-    @field:BsonProperty("_id") @param:BsonProperty("_id") val id: ObjectId? = null,
+    @field:BsonProperty("_id") @param:BsonProperty("_id")
+    val id: ObjectId? = null,
 ) {
 
     @field:BsonProperty("subtotal")
