@@ -119,3 +119,44 @@ jobs:
         uses: gradle/gradle-build-action@v2
         with:
           arguments: dockerPushNative
+
+  deploy:
+
+    if: github.event_name == 'release'
+
+    needs: [ publish ]
+
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: read
+      packages: write
+      id-token: write
+
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          repository: 'dew-org/k8s'
+
+      - id: 'auth'
+        name: 'Authenticate to Google Cloud'
+        uses: 'google-github-actions/auth@v0'
+        with:
+          credentials_json: ${{ secrets.GCP_CREDENTIALS }}
+
+      - name: Set up GKE credentials
+        uses: google-github-actions/get-gke-credentials@v0
+        with:
+          cluster_name: ${{ env.GKE_CLUSTER }}
+          location: ${{ env.GKE_ZONE }}
+
+      - name: get tag
+        id: get_tag
+        run: |
+          echo ::set-output name=SOURCE_TAG::${GITHUB_REF#refs/tags/v}
+      - name: update deployment file
+        run: |-
+          sed -i.back "s/invoices:0.1.0/invoices:${{ steps.get_tag.outputs.SOURCE_TAG }}/g" invoices/deployment.yml
+      - name: deploy
+        run: |-
+          kubectl apply -f invoices/deployment.yml
