@@ -25,7 +25,8 @@ class InvoiceService(private val invoiceRepository: InvoiceRepository, private v
                     item.discount / 100
                 )
             },
-            command.currency
+            command.currency,
+            command.userId
         )
 
         return invoiceRepository.save(invoice).flatMap { added: Boolean ->
@@ -44,8 +45,8 @@ class InvoiceService(private val invoiceRepository: InvoiceRepository, private v
         }
     }
 
-    fun searchAll(): Publisher<InvoiceResponse> {
-        return Flux.from(invoiceRepository.searchAll()).map { it.toResponse() }
+    fun searchAll(userId: String): Publisher<InvoiceResponse> {
+        return Flux.from(invoiceRepository.searchAll(userId)).map { it.toResponse() }
     }
 
     fun findById(id: String): Mono<InvoiceResponse> {

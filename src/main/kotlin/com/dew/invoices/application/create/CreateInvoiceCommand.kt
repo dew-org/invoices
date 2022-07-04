@@ -9,5 +9,6 @@ import javax.validation.constraints.NotNull
 data class CreateInvoiceCommand(
     @field:NotBlank @field:NotNull val customer: Customer,
     @field:NotNull @field:NotEmpty val items: List<InvoiceItem>,
-    @field:NotNull @field:NotEmpty val currency: String
+    @field:NotNull @field:NotEmpty val currency: String,
+    @field:NotNull @field:NotEmpty val userId: String
 )

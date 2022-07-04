@@ -8,6 +8,7 @@ import io.micronaut.http.HttpStatus
 import io.micronaut.http.annotation.Controller
 import io.micronaut.http.annotation.Get
 import io.micronaut.http.annotation.Post
+import io.micronaut.http.annotation.QueryValue
 import io.micronaut.security.annotation.Secured
 import io.micronaut.security.rules.SecurityRule
 import org.hashids.Hashids
@@ -26,7 +27,8 @@ open class InvoiceController(private val invoiceService: InvoiceService) {
     }
 
     @Get
-    open fun searchAll(): Publisher<InvoiceResponse> = invoiceService.searchAll()
+    open fun searchAll(@QueryValue("userId") userId: String): Publisher<InvoiceResponse> =
+        invoiceService.searchAll(userId)
 
     @Get("/{id}")
     open fun findById(id: String): Mono<HttpResponse<InvoiceResponse>> {

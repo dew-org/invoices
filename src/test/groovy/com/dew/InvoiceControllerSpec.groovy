@@ -45,7 +45,7 @@ class InvoiceControllerSpec extends Specification implements TestPropertyProvide
         var product = new Product("123", "Celular")
         var customer = new Customer("123", "Joao")
         var invoiceItem = new InvoiceItem(product, 15000.0f, 1, 0.0f, 0.0f)
-        var invoice = new CreateInvoiceCommand(customer, List.of(invoiceItem), "USD")
+        var invoice = new CreateInvoiceCommand(customer, List.of(invoiceItem), "USD", "user-01")
 
         var status = client.save(invoice)
 
@@ -66,7 +66,14 @@ class InvoiceControllerSpec extends Specification implements TestPropertyProvide
         !response.body.present
 
         when:
-        var invoices = client.searchAll()
+        var invoices = client.searchAll("user-02")
+
+        then:
+        invoices != null
+        invoices.empty
+
+        when:
+        invoices = client.searchAll("user-01")
 
         then:
         invoices != null

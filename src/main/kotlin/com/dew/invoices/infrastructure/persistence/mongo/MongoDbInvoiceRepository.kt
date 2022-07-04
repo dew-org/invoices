@@ -20,8 +20,8 @@ open class MongoDbInvoiceRepository(
         Mono.from(collection.insertOne(invoice))
             .map { true }.onErrorReturn(false)
 
-    override fun searchAll(): Publisher<Invoice> =
-        Flux.from(collection.find())
+    override fun searchAll(userId: String): Publisher<Invoice> =
+        Flux.from(collection.find(Filters.eq("userId", userId)))
 
     override fun findById(id: String): Mono<Invoice> = Mono.from(
         collection.find(Filters.eq("_id", ObjectId(id))).first()

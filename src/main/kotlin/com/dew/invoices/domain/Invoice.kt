@@ -28,6 +28,11 @@ data class Invoice @Creator @BsonCreator constructor(
     @field:NotBlank
     val currency: String,
 
+    @field:BsonProperty("userId")
+    @param:BsonProperty("userId")
+    @field:NotBlank
+    val userId: String,
+
     @field:BsonProperty("_id") @param:BsonProperty("_id")
     val id: ObjectId? = null,
 ) {
