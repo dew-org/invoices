@@ -23,7 +23,7 @@ dependencies {
     kapt("io.micronaut:micronaut-http-validation")
     annotationProcessor("io.micronaut.security:micronaut-security-annotations")
 
-    implementation("com.github.dew-org:common:0.1.2")
+    implementation 'com.github.dew-org:common:v0.1.3'
 
     implementation("io.micronaut.security:micronaut-security-jwt")
     implementation("io.micronaut:micronaut-http-client")
