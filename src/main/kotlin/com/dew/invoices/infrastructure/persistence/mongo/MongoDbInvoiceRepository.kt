@@ -1,5 +1,6 @@
 package com.dew.invoices.infrastructure.persistence.mongo
 
+import com.dew.common.infrastructure.persistence.mongo.MongoDbConfiguration
 import com.dew.invoices.domain.Invoice
 import com.dew.invoices.domain.InvoiceRepository
 import com.mongodb.client.model.Filters
