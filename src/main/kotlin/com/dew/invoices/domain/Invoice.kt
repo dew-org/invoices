@@ -38,17 +38,25 @@ data class Invoice @Creator @BsonCreator constructor(
 ) {
 
     @field:BsonProperty("subtotal")
-    val subtotal: Float = items.map { item -> item.subtotal }.reduce { acc, fl -> acc + fl }
+    var subtotal: Float = 0.0f
 
     @field:BsonProperty("tax")
-    val tax: Float = items.map { item -> item.subtotal * item.tax }.reduce { acc, fl -> acc + fl }
+    var tax: Float = 0.0f
 
     @field:BsonProperty("discount")
-    val discount: Float = items.map { item -> item.subtotal * item.discount }.reduce { acc, fl -> acc + fl }
+    var discount: Float = 0.0f
 
     @field:BsonProperty
-    val total: Float = items.map { item -> item.total }.reduce { acc, fl -> acc + fl }
+    var total: Float = 0.0f
 
     @field:BsonProperty("createdAt")
     val createdAt: Date = Date.from(Instant.now(Clock.systemUTC()))
+
+    fun calculateTotal() {
+        subtotal = items.map { item -> item.subtotal }.reduce { acc, fl -> acc + fl }
+        tax = items.map { item -> item.subtotal * item.tax }.reduce { acc, fl -> acc + fl }
+        discount = items.map { item -> item.subtotal * item.discount }.reduce { acc, fl -> acc + fl }
+
+        total = items.map { item -> item.total }.reduce { acc, fl -> acc + fl }
+    }
 }

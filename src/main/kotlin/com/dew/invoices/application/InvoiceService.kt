@@ -29,6 +29,8 @@ class InvoiceService(private val invoiceRepository: InvoiceRepository, private v
             command.userId
         )
 
+        invoice.calculateTotal()
+
         return invoiceRepository.save(invoice).flatMap { added: Boolean ->
             // If a new invoice was added, send product purchased to update stock
             if (added) {

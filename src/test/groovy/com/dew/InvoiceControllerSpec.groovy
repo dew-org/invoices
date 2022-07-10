@@ -44,7 +44,7 @@ class InvoiceControllerSpec extends Specification implements TestPropertyProvide
         when:
         var product = new Product("123", "Celular")
         var customer = new Customer("123", "Joao")
-        var invoiceItem = new InvoiceItem(product, 15000.0f, 1, 0.0f, 0.0f)
+        var invoiceItem = new InvoiceItem(product, 10000.0f, 1, 0.0f, 0.1f)
         var invoice = new CreateInvoiceCommand(customer, List.of(invoiceItem), "USD", "user-01")
 
         var status = client.save(invoice)
@@ -88,6 +88,10 @@ class InvoiceControllerSpec extends Specification implements TestPropertyProvide
         findResponse.body.present
         findResponse.body().id == invoiceId
         findResponse.body().currency == "USD"
+        findResponse.body().subtotal == 10000.0f
+        findResponse.body().tax == 0.0f
+        findResponse.body().discount == 1000.0f
+        findResponse.body().total == 9000.0f
     }
 
     @Override
