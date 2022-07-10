@@ -21,8 +21,8 @@ class InvoiceService(private val invoiceRepository: InvoiceRepository, private v
                     Product(item.product.code, item.product.name, item.product.description),
                     item.price,
                     item.quantity,
-                    item.tax / 100,
-                    item.discount / 100
+                    item.tax,
+                    item.discount
                 )
             },
             command.currency,
