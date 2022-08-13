@@ -40,7 +40,10 @@ class InvoiceService(private val invoiceRepository: InvoiceRepository, private v
                     )
                 }
 
+                val generatedInvoice = GeneratedInvoice(invoice.items.size, invoice.total.toDouble(), invoice.userId)
+
                 invoiceProducer.productPurchase(purchasedProducts)
+                invoiceProducer.invoiceGenerated(generatedInvoice)
             }
 
             Mono.just(added)

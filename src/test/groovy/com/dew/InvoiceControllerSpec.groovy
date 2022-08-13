@@ -1,6 +1,7 @@
 package com.dew
 
 import com.dew.common.domain.invoices.PurchasedProduct
+import com.dew.invoices.application.GeneratedInvoice
 import com.dew.invoices.application.create.CreateInvoiceCommand
 import com.dew.invoices.application.create.Customer
 import com.dew.invoices.application.create.InvoiceItem
@@ -28,6 +29,7 @@ import java.util.concurrent.ConcurrentLinkedDeque
 class InvoiceControllerSpec extends Specification implements TestPropertyProvider {
 
     private static final Collection<PurchasedProduct> received = new ConcurrentLinkedDeque<>()
+    private static final Collection<GeneratedInvoice> receivedInvoices = new ConcurrentLinkedDeque<>()
 
     static KafkaContainer kafka = new KafkaContainer(DockerImageName.parse('confluentinc/cp-kafka:latest'))
 
@@ -55,6 +57,7 @@ class InvoiceControllerSpec extends Specification implements TestPropertyProvide
         new PollingConditions(timeout: 5).eventually {
             !received.isEmpty()
             1 == received.size()
+            1 == receivedInvoices.size()
         }
 
         when:
@@ -109,6 +112,11 @@ class InvoiceControllerSpec extends Specification implements TestPropertyProvide
         @Topic('product-purchase')
         void productPurchase(List<PurchasedProduct> products) {
             received.addAll(products)
+        }
+
+        @Topic("invoice-generated")
+        void invoiceGenerated(GeneratedInvoice invoice) {
+            receivedInvoices.add(invoice)
         }
     }
 }
