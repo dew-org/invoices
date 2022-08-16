@@ -15,15 +15,23 @@ repositories {
     mavenCentral()
 
     maven {
+        url = uri("https://maven.pkg.github.com/dew-org/common")
+        credentials {
+            username = project.findProperty("gpr.user") ?: System.getenv("USERNAME")
+            password = project.findProperty("gpr.key") ?: System.getenv("TOKEN")
+        }
+    }
+
+    maven {
         url 'https://jitpack.io'
     }
 }
 
 dependencies {
     kapt("io.micronaut:micronaut-http-validation")
-    annotationProcessor("io.micronaut.security:micronaut-security-annotations")
+    kapt("io.micronaut.security:micronaut-security-annotations")
 
-    implementation 'com.github.dew-org:common:0.1.5'
+    implementation 'com.dew:common:0.1.4'
 
     implementation("io.micronaut.security:micronaut-security-jwt")
     implementation("io.micronaut:micronaut-http-client")
