@@ -33,7 +33,7 @@ class InvoiceControllerSpec extends Specification implements TestPropertyProvide
 
     static KafkaContainer kafka = new KafkaContainer(DockerImageName.parse('confluentinc/cp-kafka:latest'))
 
-    static MongoDBContainer mongo = new MongoDBContainer(DockerImageName.parse('mongo:latest'))
+    static MongoDBContainer mongo = new MongoDBContainer(DockerImageName.parse('mongo:5.0.12'))
             .withExposedPorts(27017)
 
     @Inject
