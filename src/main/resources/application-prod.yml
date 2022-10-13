@@ -1,0 +1,4 @@
+gcp:
+  project-id: ${GCP_PROJECT_ID}
+  credentials:
+    encoded-key: ${GCP_CREDENTIALS}
