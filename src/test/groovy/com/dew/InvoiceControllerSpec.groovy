@@ -6,34 +6,34 @@ import com.dew.invoices.application.create.CreateInvoiceCommand
 import com.dew.invoices.application.create.Customer
 import com.dew.invoices.application.create.InvoiceItem
 import com.dew.invoices.application.create.Product
-import io.micronaut.configuration.kafka.annotation.KafkaListener
-import io.micronaut.configuration.kafka.annotation.OffsetReset
-import io.micronaut.configuration.kafka.annotation.Topic
+import com.dew.invoices.domain.InvoiceProducer
+import io.micronaut.gcp.pubsub.annotation.Topic
 import io.micronaut.http.HttpStatus
 import io.micronaut.test.extensions.spock.annotation.MicronautTest
 import io.micronaut.test.support.TestPropertyProvider
 import jakarta.inject.Inject
+import jakarta.inject.Singleton
 import org.bson.types.ObjectId
 import org.hashids.Hashids
-import org.testcontainers.containers.KafkaContainer
 import org.testcontainers.containers.MongoDBContainer
 import org.testcontainers.spock.Testcontainers
 import org.testcontainers.utility.DockerImageName
 import spock.lang.Specification
+import spock.lang.Stepwise
 import spock.util.concurrent.PollingConditions
 
 import java.util.concurrent.ConcurrentLinkedDeque
 
 @MicronautTest
 @Testcontainers
+@Stepwise
 class InvoiceControllerSpec extends Specification implements TestPropertyProvider {
 
     private static final Collection<PurchasedProduct> received = new ConcurrentLinkedDeque<>()
     private static final Collection<GeneratedInvoice> receivedInvoices = new ConcurrentLinkedDeque<>()
+    private static String invoiceId
 
-    static KafkaContainer kafka = new KafkaContainer(DockerImageName.parse('confluentinc/cp-kafka:latest'))
-
-    static MongoDBContainer mongo = new MongoDBContainer(DockerImageName.parse('mongo:latest'))
+    static MongoDBContainer mongo = new MongoDBContainer(DockerImageName.parse('mongo:5.0.12'))
             .withExposedPorts(27017)
 
     @Inject
@@ -42,7 +42,7 @@ class InvoiceControllerSpec extends Specification implements TestPropertyProvide
     @Inject
     InvoiceClient client
 
-    def 'test interact with invoices controller'() {
+    def 'when save invoice should return CREATED'() {
         when:
         var product = new Product("123", "Celular")
         var customer = new Customer("123", "Joao")
@@ -59,7 +59,9 @@ class InvoiceControllerSpec extends Specification implements TestPropertyProvide
             1 == received.size()
             1 == receivedInvoices.size()
         }
+    }
 
+    def 'when find non existing invoice should return NOT_FOUND'() {
         when:
         var id = new Hashids().encodeHex(new ObjectId().toString())
         var response = client.findById(id)
@@ -67,23 +69,23 @@ class InvoiceControllerSpec extends Specification implements TestPropertyProvide
         then:
         response != null
         !response.body.present
+    }
 
+    def 'when search invoices by user should return a list of invoices'() {
         when:
-        var invoices = client.searchAll("user-02")
-
-        then:
-        invoices != null
-        invoices.empty
-
-        when:
-        invoices = client.searchAll("user-01")
+        var invoices = client.searchAll("user-01")
 
         then:
         invoices != null
         !invoices.empty
+        invoices.size() == 1
 
+        cleanup:
+        invoiceId = invoices[0].id
+    }
+
+    def 'when find existing invoice should return an invoice'() {
         when:
-        var invoiceId = invoices[0].id
         var findResponse = client.findById(invoiceId)
 
         then:
@@ -99,15 +101,13 @@ class InvoiceControllerSpec extends Specification implements TestPropertyProvide
 
     @Override
     Map<String, String> getProperties() {
-        kafka.start()
         mongo.start()
 
-        return ["kafka.bootstrap.servers": kafka.bootstrapServers,
-                "mongodb.uri"            : mongo.replicaSetUrl]
+        return ["mongodb.uri": mongo.replicaSetUrl]
     }
 
-    @KafkaListener(offsetReset = OffsetReset.EARLIEST)
-    static class InvoiceListener {
+    @Singleton
+    static class InvoiceListener implements InvoiceProducer {
 
         @Topic('product-purchase')
         void productPurchase(List<PurchasedProduct> products) {

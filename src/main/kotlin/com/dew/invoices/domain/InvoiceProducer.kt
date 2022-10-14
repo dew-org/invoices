@@ -2,10 +2,13 @@ package com.dew.invoices.domain
 
 import com.dew.common.domain.invoices.PurchasedProduct
 import com.dew.invoices.application.GeneratedInvoice
-import io.micronaut.configuration.kafka.annotation.KafkaClient
-import io.micronaut.configuration.kafka.annotation.Topic
+import io.micronaut.context.annotation.Requires
+import io.micronaut.context.env.Environment
+import io.micronaut.gcp.pubsub.annotation.PubSubClient
+import io.micronaut.gcp.pubsub.annotation.Topic
 
-@KafkaClient
+@PubSubClient
+@Requires(notEnv = [Environment.TEST])
 interface InvoiceProducer {
 
     @Topic("product-purchase")

@@ -1,18 +1,26 @@
 plugins {
-    id("org.jetbrains.kotlin.jvm") version "1.7.10"
-    id("org.jetbrains.kotlin.kapt") version "1.7.10"
-    id("org.jetbrains.kotlin.plugin.allopen") version "1.7.10"
+    id("org.jetbrains.kotlin.jvm") version "1.7.20"
+    id("org.jetbrains.kotlin.kapt") version "1.7.20"
+    id("org.jetbrains.kotlin.plugin.allopen") version "1.7.20"
     id("groovy")
     id("jacoco")
     id("com.github.johnrengelman.shadow") version "7.1.2"
-    id("io.micronaut.application") version "3.5.1"
+    id("io.micronaut.application") version "3.6.2"
 }
 
-version = "0.1.3"
+version = "0.1.4"
 group = "com.dew"
 
 repositories {
     mavenCentral()
+
+    maven {
+        url = uri("https://maven.pkg.github.com/dew-org/common")
+        credentials {
+            username = project.findProperty("gpr.user") ?: System.getenv("USERNAME")
+            password = project.findProperty("gpr.key") ?: System.getenv("TOKEN")
+        }
+    }
 
     maven {
         url 'https://jitpack.io'
@@ -21,9 +29,12 @@ repositories {
 
 dependencies {
     kapt("io.micronaut:micronaut-http-validation")
-    annotationProcessor("io.micronaut.security:micronaut-security-annotations")
+    kapt("io.micronaut.security:micronaut-security-annotations")
 
-    implementation 'com.github.dew-org:common:0.1.5'
+    implementation 'com.dew:common:0.1.4'
+
+    implementation 'io.micronaut.gcp:micronaut-gcp-pubsub'
+    implementation 'io.micronaut.gcp:micronaut-gcp-secret-manager'
 
     implementation("io.micronaut.security:micronaut-security-jwt")
     implementation("io.micronaut:micronaut-http-client")
