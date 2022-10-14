@@ -35,6 +35,7 @@ dependencies {
 
     implementation 'io.micronaut.gcp:micronaut-gcp-pubsub'
     implementation 'io.micronaut.gcp:micronaut-gcp-secret-manager'
+    implementation 'com.google.cloud:native-image-support:0.14.1'
 
     implementation("io.micronaut.security:micronaut-security-jwt")
     implementation("io.micronaut:micronaut-http-client")
