@@ -118,30 +118,10 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-      - name: setup GraalVM CE
-        uses: graalvm/setup-graalvm@v1
-        with:
-          version: '22.1.0'
-          java-version: '11'
-          components: 'native-image'
-
-      - name: build and test native image
-        run: |
-          if ./gradlew tasks --no-daemon --all | grep -w "testNativeImage"
-          then
-            ./gradlew check testNativeImage --continue --no-daemon
-          else
-            ./gradlew check --continue --no-daemon
-          fi
-        env:
-          USERNAME: cantte
-          TOKEN: ${{ github.token }}
-          TESTCONTAINERS_RYUK_DISABLED: true
-
-      - name: build and push native image
+      - name: build and push docker image
         env:
           USERNAME: cantte
           TOKEN: ${{ github.token }}
           TESTCONTAINERS_RYUK_DISABLED: true
         run: |
-          ./gradlew check dockerPushNative --no-daemon
+          ./gradlew check dockerPush --no-daemon
